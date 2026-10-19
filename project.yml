@@ -1,0 +1,102 @@
+name: SafetyRounds
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+targets:
+  SafetyRounds:
+    type: application
+    platform: iOS
+    sources:
+      - path: SafetyRounds
+      - path: Shared
+    dependencies:
+      - target: SafetyRoundsWidget
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.safety-rounds
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: SafetyRounds/SafetyRounds.entitlements
+    info:
+      path: SafetyRounds/Info.plist
+      properties:
+        CFBundleDisplayName: Safety Rounds
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        ITSAppUsesNonExemptEncryption: false
+        NSCameraUsageDescription: Safety Rounds uses the camera to scan the QR label on a piece of equipment and open its checklist.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.example.safety-rounds.asset
+            CFBundleURLSchemes: [safetyrounds]
+  SafetyRoundsWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: SafetyRoundsWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.safety-rounds.widget
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: SafetyRoundsWidget/SafetyRoundsWidget.entitlements
+        SKIP_INSTALL: YES
+    info:
+      path: SafetyRoundsWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Safety Rounds Widget
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+  SafetyRoundsTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: SafetyRoundsTests
+    dependencies:
+      - target: SafetyRounds
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.safety-rounds.tests
+        GENERATE_INFOPLIST_FILE: YES
+  SafetyRoundsUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: SafetyRoundsUITests
+    dependencies:
+      - target: SafetyRounds
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.safety-rounds.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: SafetyRounds
+schemes:
+  SafetyRounds:
+    build:
+      targets:
+        SafetyRounds: all
+        SafetyRoundsTests: [test]
+        SafetyRoundsUITests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: SafetyRounds/StoreKit/Products.storekit
+    test:
+      config: Debug
+      storeKitConfiguration: SafetyRounds/StoreKit/Products.storekit
+      targets:
+        - SafetyRoundsTests
+        - SafetyRoundsUITests
+    archive:
+      config: Release
